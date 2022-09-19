@@ -43,6 +43,7 @@ namespace ExampleGallery
     {
         static ExampleDefinition[] definitions =
         {
+            new ExampleDefinition("ShaderPlayground", typeof(ShaderPlayground)),
             // Visual demos. Examples with unsupported components remain here, but are commented out.
             //new ExampleDefinition("Burning Text", typeof(BurningTextExample)),
             new ExampleDefinition("Mandelbrot", typeof(Mandelbrot)),
