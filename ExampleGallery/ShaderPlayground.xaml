@@ -9,6 +9,6 @@
     mc:Ignorable="d">
 
     <Grid>
-        <canvas:CanvasControl x:Name="canvasControl" ClearColor="CornflowerBlue" Draw="canvasControl_Draw"/>
+        <canvas:CanvasControl x:Name="canvasControl" Draw="canvasControl_Draw"/>
     </Grid>
 </UserControl>
