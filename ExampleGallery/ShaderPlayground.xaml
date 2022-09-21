@@ -11,7 +11,7 @@
     <Grid>
         <canvas:CanvasControl x:Name="canvasControl" Draw="canvasControl_Draw"/>
         <StackPanel>
-            <Button Click="OnButtonClick">Compile!</Button>
+            <Button Click="OnButtonClick">Refresh</Button>
             <ListView Name="listView" />
         </StackPanel>
     </Grid>

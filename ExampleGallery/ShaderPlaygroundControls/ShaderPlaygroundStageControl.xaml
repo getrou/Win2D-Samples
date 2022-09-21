@@ -9,7 +9,7 @@
 
     <StackPanel Orientation="Vertical">
         <StackPanel.Background>
-            <SolidColorBrush Color="Azure" Opacity="0.25" />
+            <SolidColorBrush x:Name="BackgroundColor" Color="Azure" Opacity="0.25" />
         </StackPanel.Background>
         <ComboBox Header="Shader Stage" PlaceholderText="Pick a shader" Width="200" SelectionChanged="ComboBox_SelectionChanged">
             <x:String>Blur</x:String>
@@ -17,7 +17,7 @@
             <!--<x:String>meep</x:String>
             <x:String>moop</x:String>-->
         </ComboBox>
-        <StackPanel Orientation="Vertical" x:Name="Details" Padding="20,0,0,0">
+        <StackPanel Orientation="Vertical" x:Name="Parameters" Padding="20,0,0,0">
             
         </StackPanel>
     </StackPanel>

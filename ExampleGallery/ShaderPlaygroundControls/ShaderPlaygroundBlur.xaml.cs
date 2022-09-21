@@ -1,5 +1,6 @@
 ﻿using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Effects;
+using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -24,25 +25,41 @@ namespace ExampleGallery
 {
     public sealed partial class ShaderPlaygroundBlur : UserControl, IShaderPlaygroundStage
     {
-        private ShaderPlayground resourceCreator;
+        private ShaderPlayground shaderPlayground;
         private ShaderPlaygroundStageControl blurInput;
 
-        public ShaderPlaygroundBlur(ShaderPlayground resourceCreator)
+        public ShaderPlaygroundBlur(ShaderPlayground shaderPlayground)
         {
             this.InitializeComponent();
-            this.resourceCreator = resourceCreator;
-            blurInput = new ShaderPlaygroundStageControl(resourceCreator);
+            this.shaderPlayground = shaderPlayground;
+            blurInput = new ShaderPlaygroundStageControl(shaderPlayground);
             BlurInputHolder.Children.Add(blurInput);
         }
 
         public IGraphicsEffectSource GetGraphicsEffectSource()
         {
+            IGraphicsEffectSource source = blurInput.GetGraphicsEffectSource();
+            if (source == null)
+            {
+                blurInput.SetError();
+                return null;
+            }
+            else
+            {
+                blurInput.ClearError();
+            }
+
             GaussianBlurEffect blurEffect = new GaussianBlurEffect()
             {
-                Source = blurInput.GetGraphicsEffectSource(),
+                Source = source,
                 BlurAmount = (float)BlurRadius.Value
             };
             return blurEffect;
+        }
+
+        private void BlurRadius_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            shaderPlayground.RecompileShader();
         }
     }
 }

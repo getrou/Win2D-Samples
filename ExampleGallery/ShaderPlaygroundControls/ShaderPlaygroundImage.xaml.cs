@@ -25,12 +25,12 @@ namespace ExampleGallery
     public sealed partial class ShaderPlaygroundImage : UserControl, IShaderPlaygroundStage
     {
         private CanvasBitmap bitmap;
-        private ShaderPlayground resourceCreator;
+        private ShaderPlayground shaderPlayground;
 
-        public ShaderPlaygroundImage(ShaderPlayground resourceCreator)
+        public ShaderPlaygroundImage(ShaderPlayground shaderPlayground)
         {
             this.InitializeComponent();
-            this.resourceCreator = resourceCreator;
+            this.shaderPlayground = shaderPlayground;
         }
 
         public async void OnButtonClick(object sender, RoutedEventArgs e)
@@ -45,13 +45,14 @@ namespace ExampleGallery
             if (file != null)
             {
                 FileButton.Content = "Selected File:" + file.Name;
-                bitmap = await CanvasBitmap.LoadAsync(resourceCreator.GetResourceCreator(), file.Path);
+                bitmap = await CanvasBitmap.LoadAsync(shaderPlayground.GetResourceCreator(), file.Path);
             }
             else
             {
                 FileButton.Content = "Select Image";
                 bitmap = null;
             }
+            shaderPlayground.RecompileShader();
         }
 
         public IGraphicsEffectSource GetGraphicsEffectSource()

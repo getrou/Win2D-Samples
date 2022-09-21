@@ -18,12 +18,25 @@ public sealed partial class ShaderPlayground : UserControl
 {
     private ShaderPlaygroundStageControl root;
     private ICanvasImage imageEffect;
+    private float time;
 
     public ShaderPlayground()
     {
         this.InitializeComponent();
         root = new ShaderPlaygroundStageControl(this);
         listView.Items.Add(root);
+
+        // Redraw the canvas 60 times per second for when we do cool animated shaders
+        DispatcherTimer timer = new DispatcherTimer();
+        timer.Tick += Timer_Tick;
+        timer.Interval = TimeSpan.FromMilliseconds(17);
+        timer.Start();
+    }
+
+    private void Timer_Tick(object sender, object e)
+    {
+        canvasControl.Invalidate();
+        time += 0.017f;
     }
 
     internal ICanvasResourceCreator GetResourceCreator()
@@ -33,6 +46,12 @@ public sealed partial class ShaderPlayground : UserControl
 
     public void OnButtonClick(object sender, RoutedEventArgs e)
     {
+        RecompileShader();
+    }
+
+    public void RecompileShader()
+    {
+        time = 0;
         IGraphicsEffectSource effect = root.GetGraphicsEffectSource();
         if (effect != null)
         {
@@ -50,21 +69,24 @@ public sealed partial class ShaderPlayground : UserControl
             return;
         }
 
-        // Get the shader bytecode
-        byte[] bytecode = D2D1PixelShader.LoadBytecode<MyShader>().ToArray();
+        else
+        {
+            // Get the shader bytecode
+            byte[] bytecode = D2D1PixelShader.LoadBytecode<MyShader>().ToArray();
 
-        // Create a Win2D pixel shader effect with the shader bytecode
-        PixelShaderEffect effect = new(bytecode);
+            // Create a Win2D pixel shader effect with the shader bytecode
+            PixelShaderEffect effect = new(bytecode);
 
-        // Set the shader properties in the constant buffer
-        effect.Properties[nameof(MyShader.time)] = 0.0f;
-        effect.Properties[nameof(MyShader.width)] = (int)sender.ActualWidth;
-        effect.Properties[nameof(MyShader.height)] = (int)sender.ActualHeight;
+            // Set the shader properties in the constant buffer
+            effect.Properties[nameof(MyShader.time)] = time;
+            effect.Properties[nameof(MyShader.width)] = (int)sender.ActualWidth;
+            effect.Properties[nameof(MyShader.height)] = (int)sender.ActualHeight;
 
-        // Draw the pixel shader
-        args.DrawingSession.DrawImage(effect);
+            // Draw the pixel shader
+            args.DrawingSession.DrawImage(effect);
 
-        args.DrawingSession.DrawText("The background is a custom D2D1 pixel shader!", 100, 0, Colors.White);
+            args.DrawingSession.DrawText("The background is a custom D2D1 pixel shader!", 100, 0, Colors.White);
+        }
     }
 }
 
@@ -86,6 +108,9 @@ public readonly partial struct MyShader : ID2D1PixelShader
 
         // Time varying pixel color
         float3 col = 0.5f + 0.5f * Hlsl.Cos(time + new float3(uv, uv.X) + new float3(0, 2, 4));
+
+        // Trim the red out
+        col = new float3(0, col.YZ);
 
         // Output to screen
         return new(col, 1f);

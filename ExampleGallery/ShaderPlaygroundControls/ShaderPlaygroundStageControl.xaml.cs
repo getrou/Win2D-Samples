@@ -1,4 +1,5 @@
 ﻿using Microsoft.Graphics.Canvas;
+using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -29,28 +30,40 @@ namespace ExampleGallery
 
     public sealed partial class ShaderPlaygroundStageControl : UserControl, IShaderPlaygroundStage
     {
-        private ShaderPlayground resourceCreator;
+        private ShaderPlayground shaderPlayground;
 
-        public ShaderPlaygroundStageControl(ShaderPlayground resourceCreator)
+        public ShaderPlaygroundStageControl(ShaderPlayground shaderPlayground)
         {
             this.InitializeComponent();
-            this.resourceCreator = resourceCreator;
+            this.shaderPlayground = shaderPlayground;
         }
 
         public ICanvasResourceCreator CanvasResourceCreator { get; set; }
 
         public IGraphicsEffectSource GetGraphicsEffectSource()
         {
-            Debug.Assert(Details.Children.Count < 2);
-            if (Details.Children.Count == 0)
+            Debug.Assert(Parameters.Children.Count < 2);
+            if (Parameters.Children.Count == 0)
             {
                 return null;
             }
-            UIElement effect = Details.Children[0];
+            UIElement effect = Parameters.Children[0];
 
             // Forward call onto content UIElement that has the actual effect
             IShaderPlaygroundStage effectStage = effect.As<IShaderPlaygroundStage>();
             return effectStage.GetGraphicsEffectSource();
+        }
+
+        internal void SetError()
+        {
+            BackgroundColor.Color = Colors.Red;
+            BackgroundColor.Opacity = 1.0f;
+        }
+
+        internal void ClearError()
+        {
+            BackgroundColor.Color = Colors.Azure;
+            BackgroundColor.Opacity = 0.2f;
         }
 
         // Create the xaml control with the effect knobs
@@ -65,18 +78,20 @@ namespace ExampleGallery
             switch(effectType)
             {
                 case ("Blur"):
-                    control = new ShaderPlaygroundBlur(resourceCreator);
+                    control = new ShaderPlaygroundBlur(shaderPlayground);
                     break;
                 case ("Image"):
-                    control = new ShaderPlaygroundImage(resourceCreator);
+                    control = new ShaderPlaygroundImage(shaderPlayground);
                     break;
                 default:
                     Debug.Fail("Unrecognized Effect");
                     break;
             }
 
-            Details.Children.Clear();
-            Details.Children.Add(control);
+            Parameters.Children.Clear();
+            Parameters.Children.Add(control);
+
+            shaderPlayground.RecompileShader();
         }
     }
 }

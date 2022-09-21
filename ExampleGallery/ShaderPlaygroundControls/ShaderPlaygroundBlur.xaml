@@ -8,7 +8,7 @@
     mc:Ignorable="d">
 
     <StackPanel>
-        <Slider Header="Blur Radius" Name="BlurRadius" Width="200" Minimum="0" Maximum="50" HorizontalAlignment="Left"/>
+        <Slider Header="Blur Radius" Name="BlurRadius" Width="200" Minimum="0" Maximum="50" HorizontalAlignment="Left" ValueChanged="BlurRadius_ValueChanged"/>
         <TextBlock>Input:</TextBlock>
         <Grid Name="BlurInputHolder" />
     </StackPanel>
