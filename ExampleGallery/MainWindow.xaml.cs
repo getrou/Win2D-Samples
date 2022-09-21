@@ -23,9 +23,12 @@ namespace ExampleGallery
     /// </summary>
     public sealed partial class MainWindow : Window
     {
+        public static MainWindow mainWindow;
+
         public MainWindow()
         {
             this.InitializeComponent();
+            mainWindow = this;
 
             // filling the Navigation Menu with the samples
             var exampleDefinitions = ExampleDefinitions.Definitions;

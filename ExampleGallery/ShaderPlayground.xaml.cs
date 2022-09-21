@@ -1,22 +1,55 @@
 ﻿using ComputeSharp;
 using ComputeSharp.D2D1;
 using ComputeSharp.D2D1.Interop;
+using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Effects;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 using Microsoft.UI;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using System;
+using System.Diagnostics;
+using Windows.Graphics.Effects;
+using WinRT;
 
 namespace ExampleGallery;
 
 public sealed partial class ShaderPlayground : UserControl
 {
+    private ShaderPlaygroundStageControl root;
+    private ICanvasImage imageEffect;
+
     public ShaderPlayground()
     {
         this.InitializeComponent();
+        root = new ShaderPlaygroundStageControl(this);
+        listView.Items.Add(root);
+    }
+
+    internal ICanvasResourceCreator GetResourceCreator()
+    {
+        return canvasControl.Device;
+    }
+
+    public void OnButtonClick(object sender, RoutedEventArgs e)
+    {
+        IGraphicsEffectSource effect = root.GetGraphicsEffectSource();
+        if (effect != null)
+        {
+            this.imageEffect = effect.As<ICanvasImage>();
+        }
+        canvasControl.Invalidate();
     }
 
     void canvasControl_Draw(CanvasControl sender, CanvasDrawEventArgs args)
     {
+        if (imageEffect != null)
+        {
+            args.DrawingSession.DrawImage(imageEffect);
+            args.DrawingSession.DrawText("The background is a custom effect pipeline!", 100, 0, Colors.White);
+            return;
+        }
+
         // Get the shader bytecode
         byte[] bytecode = D2D1PixelShader.LoadBytecode<MyShader>().ToArray();
 
@@ -31,7 +64,7 @@ public sealed partial class ShaderPlayground : UserControl
         // Draw the pixel shader
         args.DrawingSession.DrawImage(effect);
 
-        args.DrawingSession.DrawText("The background is a custom D2D1 pixel shader!", 100, 100, Colors.White);
+        args.DrawingSession.DrawText("The background is a custom D2D1 pixel shader!", 100, 0, Colors.White);
     }
 }
 

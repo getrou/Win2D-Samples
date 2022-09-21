@@ -85,6 +85,9 @@
     <None Remove="PlatformResources.xaml" />
     <None Remove="PrintingExample.xaml" />
     <None Remove="ShaderPlayground.xaml" />
+    <None Remove="ShaderPlaygroundControls\ShaderPlaygroundBlur.xaml" />
+    <None Remove="ShaderPlaygroundControls\ShaderPlaygroundImage.xaml" />
+    <None Remove="ShaderPlaygroundStageControl.xaml" />
     <None Remove="Shaders\Mandelbrot.bin" />
     <None Remove="ShapesExample.xaml" />
     <None Remove="SpriteBatchPerf.xaml" />
@@ -424,6 +427,15 @@
     <None Update="BackgroundTaskExample.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
+    <Page Update="ShaderPlaygroundControls\ShaderPlaygroundImage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="ShaderPlaygroundControls\ShaderPlaygroundBlur.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="ShaderPlaygroundStageControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="ShaderPlayground.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

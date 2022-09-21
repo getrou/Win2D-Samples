@@ -1,0 +1,24 @@
+﻿<UserControl
+    x:Class="ExampleGallery.ShaderPlaygroundStageControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ExampleGallery"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel Orientation="Vertical">
+        <StackPanel.Background>
+            <SolidColorBrush Color="Azure" Opacity="0.25" />
+        </StackPanel.Background>
+        <ComboBox Header="Shader Stage" PlaceholderText="Pick a shader" Width="200" SelectionChanged="ComboBox_SelectionChanged">
+            <x:String>Blur</x:String>
+            <x:String>Image</x:String>
+            <!--<x:String>meep</x:String>
+            <x:String>moop</x:String>-->
+        </ComboBox>
+        <StackPanel Orientation="Vertical" x:Name="Details" Padding="20,0,0,0">
+            
+        </StackPanel>
+    </StackPanel>
+</UserControl>
