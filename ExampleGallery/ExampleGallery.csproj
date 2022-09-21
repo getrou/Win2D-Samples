@@ -424,6 +424,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Assets\bricks.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Update="Assets\heightmap.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

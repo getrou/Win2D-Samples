@@ -6,13 +6,10 @@
     xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:brushes="using:ExampleGallery.Brushes"
     mc:Ignorable="d">
 
-    <Grid>
-        <canvas:CanvasControl x:Name="canvasControl" Draw="canvasControl_Draw"/>
-        <StackPanel>
-            <Button Click="OnButtonClick">Refresh</Button>
-            <ListView Name="listView" />
-        </StackPanel>
+    <Grid x:Name="RootGrid">
+        <canvas:CanvasControl Opacity="0" Draw="canvasControl_Draw"/>
     </Grid>
 </UserControl>

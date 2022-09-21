@@ -1,12 +1,21 @@
 ﻿using ComputeSharp.D2D1.Interop;
+using ExampleGallery.Brushes;
+using ExampleGallery.Lights;
 using ExampleGallery.PixelShaders;
 using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Effects;
+using Microsoft.Graphics.Canvas.UI.Composition;
 using Microsoft.Graphics.Canvas.UI.Xaml;
+using Microsoft.Graphics.DirectX;
 using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Hosting;
 using System;
+using System.Numerics;
+using System.Xml.Linq;
+using Windows.Foundation;
+using Windows.Graphics.Display;
 using Windows.Graphics.Effects;
 using WinRT;
 
@@ -22,25 +31,26 @@ public sealed partial class ShaderPlayground : UserControl
     public ShaderPlayground()
     {
         this.InitializeComponent();
-        root = new ShaderPlaygroundStageControl(this);
-        listView.Items.Add(root);
+        //root = new ShaderPlaygroundStageControl(this);
+        //listView.Items.Add(root);
 
         // Redraw the canvas 60 times per second for when we do cool animated shaders
         DispatcherTimer timer = new DispatcherTimer();
         timer.Tick += Timer_Tick;
         timer.Interval = TimeSpan.FromMilliseconds(17);
-        timer.Start();
+        //timer.Start();
     }
 
     private void Timer_Tick(object sender, object e)
     {
-        canvasControl.Invalidate();
+        //canvasControl.Invalidate();
         time += 0.017f;
     }
 
     internal ICanvasResourceCreator GetResourceCreator()
     {
-        return canvasControl.Device;
+        return null;
+        //return canvasControl.Device;
     }
 
     public void OnButtonClick(object sender, RoutedEventArgs e)
@@ -56,7 +66,7 @@ public sealed partial class ShaderPlayground : UserControl
         {
             this.imageEffect = effect.As<ICanvasImage>();
         }
-        canvasControl.Invalidate();
+        //canvasControl.Invalidate();
     }
 
     private async void canvasControl_Draw(CanvasControl sender, CanvasDrawEventArgs args)
@@ -71,7 +81,7 @@ public sealed partial class ShaderPlayground : UserControl
 
         if (_heightmap is null)
         {
-            _heightmap = await CanvasBitmap.LoadAsync(sender, new Uri("ms-appx:///Assets/heightmap.png"));
+            _heightmap = await CanvasBitmap.LoadAsync(sender, new Uri("ms-appx:///Assets/bricks.jpg"), 96);
 
             sender.Invalidate();
 
@@ -90,8 +100,30 @@ public sealed partial class ShaderPlayground : UserControl
         };
 
         // Draw the pixel shader
-        args.DrawingSession.DrawImage(effect);
+        //args.DrawingSession.DrawImage(effect);
 
-        args.DrawingSession.DrawText("The background is a custom D2D1 pixel shader!", 100, 0, Colors.White);
+        //args.DrawingSession.DrawText("The background is a custom D2D1 pixel shader!", 100, 0, Colors.White);
+
+        {
+            var visual = ElementCompositionPreview.GetElementVisual(this);
+            var compositor = visual.Compositor;
+
+            var compositionGraphicsDevice = CanvasComposition.CreateCompositionGraphicsDevice(compositor, sender.Device);
+
+            var drawingSurface = compositionGraphicsDevice.CreateDrawingSurface(new Size(1080, 1080), DirectXPixelFormat.B8G8R8A8UIntNormalized, DirectXAlphaMode.Premultiplied);
+
+            using (var ds = CanvasComposition.CreateDrawingSession(drawingSurface))
+            {
+                ds.DrawImage(effect);
+            }
+
+            var brush = compositor.CreateSurfaceBrush();
+            brush.Surface = drawingSurface;
+
+            RootGrid.Background = new MaterialBrush(brush);
+
+            RootGrid.Lights.Add(new HoverLight());
+            RootGrid.Lights.Add(new AmbLight());
+        }
     }
 }
