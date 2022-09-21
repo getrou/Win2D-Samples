@@ -17,6 +17,7 @@ public sealed partial class ShaderPlayground : UserControl
     private ShaderPlaygroundStageControl root;
     private ICanvasImage imageEffect;
     private float time;
+    private CanvasBitmap _heightmap;
 
     public ShaderPlayground()
     {
@@ -58,32 +59,39 @@ public sealed partial class ShaderPlayground : UserControl
         canvasControl.Invalidate();
     }
 
-    void canvasControl_Draw(CanvasControl sender, CanvasDrawEventArgs args)
+    private async void canvasControl_Draw(CanvasControl sender, CanvasDrawEventArgs args)
     {
-        if (imageEffect != null)
+        if (imageEffect is not null)
         {
             args.DrawingSession.DrawImage(imageEffect);
             args.DrawingSession.DrawText("The background is a custom effect pipeline!", 100, 0, Colors.White);
+
             return;
         }
 
-        else
+        if (_heightmap is null)
         {
-            // Get the shader bytecode
-            byte[] bytecode = D2D1PixelShader.LoadBytecode<AnimatedColorsShader>().ToArray();
+            _heightmap = await CanvasBitmap.LoadAsync(sender, new Uri("ms-appx:///Assets/heightmap.png"));
 
-            // Create a Win2D pixel shader effect with the shader bytecode
-            PixelShaderEffect effect = new(bytecode);
+            sender.Invalidate();
 
-            // Set the shader properties in the constant buffer
-            effect.Properties[nameof(AnimatedColorsShader.time)] = time;
-            effect.Properties[nameof(AnimatedColorsShader.width)] = (int)sender.ActualWidth;
-            effect.Properties[nameof(AnimatedColorsShader.height)] = (int)sender.ActualHeight;
-
-            // Draw the pixel shader
-            args.DrawingSession.DrawImage(effect);
-
-            args.DrawingSession.DrawText("The background is a custom D2D1 pixel shader!", 100, 0, Colors.White);
+            return;
         }
+
+        // Get the shader bytecode
+        byte[] bytecode = D2D1PixelShader.LoadBytecode<SobelShader>().ToArray();
+
+        // Create a Win2D pixel shader effect with the shader bytecode
+        PixelShaderEffect effect = new(bytecode)
+        {
+            Source1 = _heightmap,
+            Source1Mapping = SamplerCoordinateMapping.Offset,
+            MaxSamplerOffset = 1
+        };
+
+        // Draw the pixel shader
+        args.DrawingSession.DrawImage(effect);
+
+        args.DrawingSession.DrawText("The background is a custom D2D1 pixel shader!", 100, 0, Colors.White);
     }
 }
