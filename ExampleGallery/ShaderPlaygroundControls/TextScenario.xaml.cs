@@ -115,7 +115,7 @@ namespace ExampleGallery
 
             // Get the shader bytecode for the Sobel shader
             //byte[] bytecode = D2D1PixelShader.LoadBytecode<SobelShader>().ToArray();
-            byte[] bytecode = D2D1PixelShader.LoadBytecode<BumpMappingShader>().ToArray();
+            byte[] bytecode = D2D1PixelShader.LoadBytecode<SobelShader>().ToArray();
 
             // Create a Win2D pixel shader effect with the shader bytecode
             _normalEffect = new(bytecode)
