@@ -95,6 +95,7 @@ public class HoverLight : XamlLight
         CompositionLight.Dispose();
         _lightPositionExpression.Dispose();
         _offsetAnimation.Dispose();
+        CompositionLight = null;
     }
 
     protected override string GetId()

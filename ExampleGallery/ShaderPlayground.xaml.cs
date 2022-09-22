@@ -24,60 +24,32 @@ namespace ExampleGallery;
 
 public sealed partial class ShaderPlayground : UserControl
 {
+    private int _scenario = 0;
+    private int _numScenarios = 2;
+
     public ShaderPlayground()
     {
         this.InitializeComponent();
     }
 
-    int scenario = 0;
-    int numScenarios = 2;
-
-    private void ScenarioHolder_KeyDown(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
+    private void Button_Click(object sender, RoutedEventArgs e)
     {
-        if (e.Key == Windows.System.VirtualKey.Tab)
+        _scenario++;
+        if (_scenario >= _numScenarios)
         {
-            scenario++;
-            if (scenario > numScenarios)
-            {
-                scenario = scenario % numScenarios;
-            }
+            _scenario = _scenario % _numScenarios;
+        }
 
-            ScenarioHolder.Children.Clear();
+        ScenarioHolder.Children.Clear();
 
-            switch (scenario)
-            {
-                case 0:
-                    ScenarioHolder.Children.Add(new TextScenario());
-                    break;
-                case 1:
-                    ScenarioHolder.Children.Add(new BrickScenario());
-                    break;
-            }
+        switch (_scenario)
+        {
+            case 0:
+                ScenarioHolder.Children.Add(new TextScenario());
+                break;
+            case 1:
+                ScenarioHolder.Children.Add(new BrickScenario());
+                break;
         }
     }
-
-    //private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    //{
-    //    var addedItems = e.AddedItems;
-    //    Debug.Assert(addedItems.Count == 1);
-    //    Debug.Assert(addedItems[0].GetType() == typeof(string));
-
-    //    string effectType = (string)addedItems[0];
-    //    UserControl control = null;
-    //    switch (effectType)
-    //    {
-    //        case ("Brick"):
-    //            control = new BrickScenario();
-    //            break;
-    //        case ("Text"):
-    //            control = new TextScenario();
-    //            break;
-    //        default:
-    //            Debug.Fail("Unrecognized Effect");
-    //            break;
-    //    }
-
-    //    ScenarioHolder.Children.Clear();
-    //    ScenarioHolder.Children.Add(control);
-    //}
 }

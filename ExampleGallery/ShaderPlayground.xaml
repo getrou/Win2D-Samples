@@ -10,9 +10,10 @@
     mc:Ignorable="d">
 
     <Grid>
-        <Grid Name="ScenarioHolder" KeyDown="ScenarioHolder_KeyDown">
+        <Grid Name="ScenarioHolder">
             <local:TextScenario />
             <!--<local:BrickScenario />-->
         </Grid>
+        <Button VerticalAlignment="Center" Click="Button_Click">NextScenario</Button>
     </Grid>
 </UserControl>

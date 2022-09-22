@@ -28,6 +28,6 @@ public readonly partial struct BumpMappingShader : ID2D1PixelShader
         // Calculate the cross product to get the approximate normal vector
         float3 normal = Hlsl.Cross(horizontal, vertical);
 
-        return new(normal, 1);
+        return new(normal.X, (1-normal.Y), normal.Z, 1);
     }
 }

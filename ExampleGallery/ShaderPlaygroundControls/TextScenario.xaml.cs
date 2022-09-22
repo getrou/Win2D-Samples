@@ -142,7 +142,7 @@ namespace ExampleGallery
             Visual distantLightVisual = ElementCompositionPreview.GetElementVisual(DrawingGrid);
             _distantLight = _compositor.CreateDistantLight();
             _distantLight.Color = Colors.White;
-            _distantLight.Intensity = 1.0f;
+            _distantLight.Intensity = 0.5f;
             _distantLight.CoordinateSpace = distantLightVisual;
             _distantLight.Targets.Add(distantLightVisual);
 
@@ -180,7 +180,7 @@ namespace ExampleGallery
             using (var ds = _heightMap.CreateDrawingSession())
             {
                 // TODO - Why does this not result in a flat base with elevated text?
-                ds.Clear(Colors.Black);
+                ds.Clear(Color.FromArgb(0,0,0,0));
                 DrawText(ds, textBox.Text, Colors.White);
             }
 
@@ -190,7 +190,7 @@ namespace ExampleGallery
             // Draw the new normals to the drawing surface
             using (var ds = CanvasComposition.CreateDrawingSession(_normalDrawingSurface))
             {
-                ds.Clear(Colors.Black);
+                ds.Clear(Color.FromArgb(0, 0, 0, 0));
                 ds.DrawImage(_normalEffect);
             }
         }
