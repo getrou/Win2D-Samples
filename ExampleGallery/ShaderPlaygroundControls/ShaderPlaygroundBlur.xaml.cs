@@ -25,14 +25,14 @@ namespace ExampleGallery
 {
     public sealed partial class ShaderPlaygroundBlur : UserControl, IShaderPlaygroundStage
     {
-        private ShaderPlayground shaderPlayground;
+        private CustomPipelineScenario pipelineScenario;
         private ShaderPlaygroundStageControl blurInput;
 
-        public ShaderPlaygroundBlur(ShaderPlayground shaderPlayground)
+        public ShaderPlaygroundBlur(CustomPipelineScenario pipelineScenario)
         {
             this.InitializeComponent();
-            this.shaderPlayground = shaderPlayground;
-            blurInput = new ShaderPlaygroundStageControl(shaderPlayground);
+            this.pipelineScenario = pipelineScenario;
+            blurInput = new ShaderPlaygroundStageControl(pipelineScenario);
             BlurInputHolder.Children.Add(blurInput);
         }
 
@@ -59,7 +59,7 @@ namespace ExampleGallery
 
         private void BlurRadius_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            shaderPlayground.RecompileShader();
+            pipelineScenario.RecompileShader();
         }
     }
 }

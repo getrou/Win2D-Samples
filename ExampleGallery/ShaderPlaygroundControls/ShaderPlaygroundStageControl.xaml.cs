@@ -30,12 +30,12 @@ namespace ExampleGallery
 
     public sealed partial class ShaderPlaygroundStageControl : UserControl, IShaderPlaygroundStage
     {
-        private ShaderPlayground shaderPlayground;
+        private CustomPipelineScenario pipelineScenario;
 
-        public ShaderPlaygroundStageControl(ShaderPlayground shaderPlayground)
+        public ShaderPlaygroundStageControl(CustomPipelineScenario pipelineScenario)
         {
             this.InitializeComponent();
-            this.shaderPlayground = shaderPlayground;
+            this.pipelineScenario = pipelineScenario;
         }
 
         public ICanvasResourceCreator CanvasResourceCreator { get; set; }
@@ -78,10 +78,10 @@ namespace ExampleGallery
             switch(effectType)
             {
                 case ("Blur"):
-                    control = new ShaderPlaygroundBlur(shaderPlayground);
+                    control = new ShaderPlaygroundBlur(pipelineScenario);
                     break;
                 case ("Image"):
-                    control = new ShaderPlaygroundImage(shaderPlayground);
+                    control = new ShaderPlaygroundImage(pipelineScenario);
                     break;
                 default:
                     Debug.Fail("Unrecognized Effect");
@@ -91,7 +91,7 @@ namespace ExampleGallery
             Parameters.Children.Clear();
             Parameters.Children.Add(control);
 
-            shaderPlayground.RecompileShader();
+            pipelineScenario.RecompileShader();
         }
     }
 }

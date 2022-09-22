@@ -85,6 +85,8 @@
     <None Remove="PlatformResources.xaml" />
     <None Remove="PrintingExample.xaml" />
     <None Remove="ShaderPlayground.xaml" />
+    <None Remove="ShaderPlaygroundControls\BrickScenario.xaml" />
+    <None Remove="ShaderPlaygroundControls\CustomPipelineScenario.xaml" />
     <None Remove="ShaderPlaygroundControls\ShaderPlaygroundBlur.xaml" />
     <None Remove="ShaderPlaygroundControls\ShaderPlaygroundImage.xaml" />
     <None Remove="ShaderPlaygroundStageControl.xaml" />
@@ -436,6 +438,12 @@
     <None Update="BackgroundTaskExample.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
+    <Page Update="ShaderPlaygroundControls\CustomPipelineScenario.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="ShaderPlaygroundControls\BrickScenario.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="ShaderPlaygroundControls\ShaderPlaygroundImage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
