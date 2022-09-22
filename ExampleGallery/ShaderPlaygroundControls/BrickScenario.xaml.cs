@@ -47,14 +47,18 @@ namespace ExampleGallery
             var visual = ElementCompositionPreview.GetElementVisual(this);
             var compositor = visual.Compositor;
             var canvasDevice = CanvasDevice.GetSharedDevice();
-            var compositionGraphicsDevice = CanvasComposition.CreateCompositionGraphicsDevice(compositor, canvasDevice);
 
-            var drawingSurface = compositionGraphicsDevice.CreateDrawingSurface(new Size(1080, 1080), DirectXPixelFormat.B8G8R8A8UIntNormalized, DirectXAlphaMode.Premultiplied);
+            Debug.Assert(_heightmap is null);
+            _heightmap = await CanvasBitmap.LoadAsync(canvasDevice, new Uri("ms-appx:///Assets/bricks.jpg"), 96);
 
-            using (var ds = CanvasComposition.CreateDrawingSession(drawingSurface))
+            // Load brick image from file and put it in a SurfaceBrush
+            LoadedImageSurface brickColorSurface = LoadedImageSurface.StartLoadFromUri(new Uri("ms-appx:///Assets/bricks.jpg"));
+            CompositionSurfaceBrush brickColorBrush = compositor.CreateSurfaceBrush(brickColorSurface);
+
+            // Create the Material Brush
             {
-                Debug.Assert(_heightmap is null);
-                _heightmap = await CanvasBitmap.LoadAsync(canvasDevice, new Uri("ms-appx:///Assets/bricks.jpg"), 96);
+                var compositionGraphicsDevice = CanvasComposition.CreateCompositionGraphicsDevice(compositor, canvasDevice);
+                var drawingSurface = compositionGraphicsDevice.CreateDrawingSurface(new Size(1080, 1080), DirectXPixelFormat.B8G8R8A8UIntNormalized, DirectXAlphaMode.Ignore);
 
                 // Get the shader bytecode
                 byte[] bytecode = D2D1PixelShader.LoadBytecode<SobelShader>().ToArray();
@@ -67,17 +71,23 @@ namespace ExampleGallery
                     MaxSamplerOffset = 1
                 };
 
-                // Draw the pixel shader
-                ds.DrawImage(effect);
+                using (var ds = CanvasComposition.CreateDrawingSession(drawingSurface))
+                {
+                    // Draw the pixel shader
+                    ds.DrawImage(effect);
+                }
 
-                var brush = compositor.CreateSurfaceBrush();
-                brush.Surface = drawingSurface;
+                var normalBrush = compositor.CreateSurfaceBrush();
+                normalBrush.Surface = drawingSurface;
 
-                RootGrid.Background = new MaterialBrush(brush);
 
-                RootGrid.Lights.Add(new HoverLight());
-                RootGrid.Lights.Add(new AmbLight());
+                brickColorBrush.Stretch = CompositionStretch.None;
+                normalBrush.Stretch = CompositionStretch.None;
+                RootGrid.Background = new MaterialBrush(brickColorBrush, normalBrush);
             }
+
+            RootGrid.Lights.Add(new HoverLight());
+            RootGrid.Lights.Add(new AmbLight());
         }
     }
 }

@@ -1,35 +1,33 @@
 ﻿using System;
+using ComputeSharp.D2D1.Interop;
+using ExampleGallery.PixelShaders;
+using Microsoft.Graphics.Canvas.Effects;
+using Microsoft.Graphics.Canvas.UI.Composition;
+using Microsoft.Graphics.Canvas;
 using Microsoft.UI.Composition;
 using Microsoft.UI.Composition.Effects;
 using Microsoft.UI.Xaml.Media;
 using Windows.Foundation;
+using Windows.Graphics.Effects;
 using Windows.UI;
+using Microsoft.Graphics.DirectX;
 
 namespace ExampleGallery.Brushes;
 
 public class MaterialBrush : XamlCompositionBrushBase
 {
-    private LoadedImageSurface _surface;
-
+    private CompositionSurfaceBrush _colorMap;
     private CompositionSurfaceBrush _normalMap;
 
-    public MaterialBrush(CompositionSurfaceBrush brush)
+    public MaterialBrush(CompositionSurfaceBrush colorMap, CompositionSurfaceBrush normalMap)
     {
-        _normalMap = brush;
+        _colorMap = colorMap;
+        _normalMap = normalMap;
     }
 
     protected override void OnConnected()
     {
         Compositor compositor = CompositionTarget.GetCompositorForCurrentThread();
-
-        // Load NormalMap onto an ICompositionSurface using LoadedImageSurface
-        _surface = LoadedImageSurface.StartLoadFromUri(new Uri("ms-appx:///Assets/bricks.jpg"));
-
-        // Load Surface onto SurfaceBrush
-        CompositionSurfaceBrush texture = compositor.CreateSurfaceBrush(_surface);
-        texture.Stretch = CompositionStretch.None;
-
-        _normalMap.Stretch = CompositionStretch.None;
 
         // Define Effect graph
         const float glassLightAmount = 0.5f;
@@ -41,7 +39,7 @@ public class MaterialBrush : XamlCompositionBrushBase
             Source1Amount = 1,
             Source2Amount = glassLightAmount,
             MultiplyAmount = 0,
-            Source1 = new CompositionEffectSourceParameter("Texture"),
+            Source1 = new CompositionEffectSourceParameter("ColorMap"),
             Source2 = new SceneLightingEffect()
             {
                 AmbientAmount = 0.15f,
@@ -56,8 +54,8 @@ public class MaterialBrush : XamlCompositionBrushBase
         CompositionEffectBrush effectBrush = effectFactory.CreateBrush();
 
         // Set Sources to Effect
+        effectBrush.SetSourceParameter("ColorMap", _colorMap);
         effectBrush.SetSourceParameter("NormalMap", _normalMap);
-        effectBrush.SetSourceParameter("Texture", texture);
 
         // Set EffectBrush as the brush that XamlCompBrushBase paints onto Xaml UIElement
         CompositionBrush = effectBrush;
@@ -65,12 +63,6 @@ public class MaterialBrush : XamlCompositionBrushBase
 
     protected override void OnDisconnected()
     {
-        // Dispose Surface and CompositionBrushes if XamlCompBrushBase is removed from tree
-        if (_surface != null)
-        {
-            _surface.Dispose();
-            _surface = null;
-        }
         if (CompositionBrush != null)
         {
             CompositionBrush.Dispose();

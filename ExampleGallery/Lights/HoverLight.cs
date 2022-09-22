@@ -27,6 +27,7 @@ public class HoverLight : XamlLight
         spotLight.ConstantAttenuation = 1f;
         spotLight.LinearAttenuation = 0.253f;
         spotLight.QuadraticAttenuation = 0.58f;
+        spotLight.Direction = new Vector3(0, 0, -1);
 
         // Associate CompositionLight with XamlLight
         CompositionLight = spotLight;

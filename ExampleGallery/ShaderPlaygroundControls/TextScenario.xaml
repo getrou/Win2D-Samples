@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="ExampleGallery.BrickScenario"
+    x:Class="ExampleGallery.TextScenario"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:ExampleGallery"
@@ -8,7 +8,11 @@
     mc:Ignorable="d">
 
     <Grid Name="RootGrid">
-        
+        <Grid Name="DrawingGrid" />
+        <StackPanel>
+            <TextBox Name="textBox" TextChanged="textBox_TextChanged" Text="Win2D is lit!"/>
+            <Slider Header="Blur Radius" Name="BlurRadius" Width="200" Minimum="0" Maximum="10" StepFrequency="0.1" HorizontalAlignment="Left" ValueChanged="BlurRadius_ValueChanged"/>
+        </StackPanel>
     </Grid>
 
 </UserControl>

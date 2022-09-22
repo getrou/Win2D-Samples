@@ -89,6 +89,7 @@
     <None Remove="ShaderPlaygroundControls\CustomPipelineScenario.xaml" />
     <None Remove="ShaderPlaygroundControls\ShaderPlaygroundBlur.xaml" />
     <None Remove="ShaderPlaygroundControls\ShaderPlaygroundImage.xaml" />
+    <None Remove="ShaderPlaygroundControls\TextScenario.xaml" />
     <None Remove="ShaderPlaygroundStageControl.xaml" />
     <None Remove="Shaders\Mandelbrot.bin" />
     <None Remove="ShapesExample.xaml" />
@@ -438,6 +439,9 @@
     <None Update="BackgroundTaskExample.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
+    <Page Update="ShaderPlaygroundControls\TextScenario.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="ShaderPlaygroundControls\CustomPipelineScenario.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -9,5 +9,10 @@
     xmlns:brushes="using:ExampleGallery.Brushes"
     mc:Ignorable="d">
 
-    <local:BrickScenario />
+    <Grid>
+        <Grid Name="ScenarioHolder" KeyDown="ScenarioHolder_KeyDown">
+            <local:TextScenario />
+            <!--<local:BrickScenario />-->
+        </Grid>
+    </Grid>
 </UserControl>

@@ -56,6 +56,6 @@ public readonly partial struct SobelShader : ID2D1PixelShader
         float r = (dx + 1.0f) / 2.0f;
         float g = (dy + 1.0f) / 2.0f;
 
-        return new(r, g, 1, 1);
+        return new(r, 1-g, 1, 1);
     }
 }
