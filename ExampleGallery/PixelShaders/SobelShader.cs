@@ -48,10 +48,14 @@ public readonly partial struct SobelShader : ID2D1PixelShader
         // Compute direction of the vector
         float theta = Hlsl.Atan2(gy, gx);
 
-        // Convert from polar to cartesian coordinates
+        // Convert from polar to cartesian coordinates (in the [-1, 1] range)
         float dx = Hlsl.Cos(theta);
         float dy = Hlsl.Sin(theta);
 
-        return new(dx, dy, 1, 1);
+        // Normalize in the [0, 1] range
+        float r = (dx + 1.0f) / 2.0f;
+        float g = (dy + 1.0f) / 2.0f;
+
+        return new(r, g, 1, 1);
     }
 }
