@@ -103,10 +103,12 @@ public sealed partial class MaterialBrush2 : XamlCompositionBrushBase
         // Create a Win2D pixel shader effect with the shader bytecode
         _pixelShaderEffect ??= new(ShaderBytecode)
         {
-            Source1 = canvasBitmap,
             Source1Mapping = SamplerCoordinateMapping.Offset,
             MaxSamplerOffset = 1
         };
+
+        // Set the shader source
+        _pixelShaderEffect.Source1 = canvasBitmap;
 
         // Draw the pixel shader producing the normal map
         using (CanvasDrawingSession drawingSession = CanvasComposition.CreateDrawingSession(drawingSurface))
