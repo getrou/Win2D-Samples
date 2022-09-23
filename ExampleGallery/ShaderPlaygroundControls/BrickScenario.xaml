@@ -10,11 +10,13 @@
     <Grid Loaded="Grid_Loaded">
         <Grid.Background>
             <brushes:MaterialBrush2
+                x:Name="BackgroundBrush"
                 TextureUri="ms-appx:///Assets/bricks.jpg"
                 LightBlendAmount="0.5"
                 AmbientAmount="0.15"
                 DiffuseAmount="1"
                 SpecularAmount="0.1"/>
         </Grid.Background>
+        <Button Content="Pick image" Click="Button_Click" VerticalAlignment="Top"/>
     </Grid>
 </UserControl>
