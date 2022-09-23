@@ -9,7 +9,12 @@
 
     <Grid Loaded="Grid_Loaded">
         <Grid.Background>
-            <brushes:MaterialBrush2 TextureUri="ms-appx:///Assets/bricks.jpg"/>
+            <brushes:MaterialBrush2
+                TextureUri="ms-appx:///Assets/bricks.jpg"
+                LightBlendAmount="0.5"
+                AmbientAmount="0.15"
+                DiffuseAmount="1"
+                SpecularAmount="0.1"/>
         </Grid.Background>
     </Grid>
 </UserControl>
