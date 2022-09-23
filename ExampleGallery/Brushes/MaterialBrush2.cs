@@ -67,8 +67,17 @@ public sealed partial class MaterialBrush2 : XamlCompositionBrushBase
             },
         };
 
-        // Create the effect factory and final brush from the defined graph
-        CompositionEffectFactory effectFactory = compositor.CreateEffectFactory(graphicsEffect);
+        // Create the effect factory and indicate the properties that can be animated
+        CompositionEffectFactory effectFactory = compositor.CreateEffectFactory(graphicsEffect, new[]
+        {
+            "LightBlendEffect.Source2Amount",
+            "LightEffect.AmbientAmount",
+            "LightEffect.DiffuseAmount",
+            "LightEffect.SpecularAmount",
+            "BlurEffect.BlurAmount"
+        });
+
+        // Create the final brush from the defined graph
         CompositionEffectBrush effectBrush = effectFactory.CreateBrush();
 
         // Set the input sources for the effect graph
