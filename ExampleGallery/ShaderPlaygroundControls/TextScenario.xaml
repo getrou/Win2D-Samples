@@ -12,6 +12,7 @@
         <StackPanel>
             <TextBox Name="textBox" TextChanged="textBox_TextChanged" Text="Win2D is lit!"/>
             <Slider Header="Blur Radius" Name="BlurRadius" Width="200" Minimum="0" Maximum="10" StepFrequency="0.1" HorizontalAlignment="Left" ValueChanged="BlurRadius_ValueChanged"/>
+            <Slider Header="Max Text Height" Name="MaxTextHeight" Width="200" Minimum="0" Maximum="255" Value="255" StepFrequency="1" HorizontalAlignment="Left" ValueChanged="MaxTextHeight_ValueChanged"/>
         </StackPanel>
     </Grid>
 

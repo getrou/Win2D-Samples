@@ -45,11 +45,12 @@ namespace ExampleGallery
         private PixelShaderEffect _normalEffect;
         private CompositionDrawingSurface _normalDrawingSurface;
         private DistantLight _distantLight;
+        private int _maxTextHeight;
 
         public TextScenario()
         {
             this.InitializeComponent();
-            this.Loaded += TextScenario_Loaded; ;
+            this.Loaded += TextScenario_Loaded;
         }
 
         private void TextScenario_Loaded(object sender, RoutedEventArgs e)
@@ -64,6 +65,11 @@ namespace ExampleGallery
         }
 
         private void BlurRadius_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            RegenerateBackground();
+        }
+
+        private void MaxTextHeight_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             RegenerateBackground();
         }
@@ -92,7 +98,7 @@ namespace ExampleGallery
                 }
             }
         }
-
+        
         private void CreateResources()
         {
             var visual = ElementCompositionPreview.GetElementVisual(this);
@@ -170,6 +176,10 @@ namespace ExampleGallery
                 return;
             }
 
+            // Update the member variables from UI
+            _blurredHeightMap.BlurAmount = (float)BlurRadius.Value;
+            _maxTextHeight = (int)MaxTextHeight.Value;
+
             // Draw the color of the text
             using (var ds = CanvasComposition.CreateDrawingSession(_colorDrawingSurface))
             {
@@ -181,11 +191,9 @@ namespace ExampleGallery
             {
                 // TODO - Why does this not result in a flat base with elevated text?
                 ds.Clear(Color.FromArgb(0,0,0,0));
-                DrawText(ds, textBox.Text, Colors.White);
+                DrawText(ds, textBox.Text, Color.FromArgb((byte)_maxTextHeight, (byte)_maxTextHeight, (byte)_maxTextHeight, (byte)_maxTextHeight));
             }
 
-            // Update the blur radius on the height map
-            _blurredHeightMap.BlurAmount = (float)BlurRadius.Value;
             
             // Draw the new normals to the drawing surface
             using (var ds = CanvasComposition.CreateDrawingSession(_normalDrawingSurface))
