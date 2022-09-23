@@ -2,7 +2,7 @@
 using ExampleGallery.Lights;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Controls.Primitives;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using WinRT.Interop;
@@ -38,5 +38,30 @@ public sealed partial class BrickScenario : UserControl
         var copy = await file.CopyAsync(ApplicationData.Current.TemporaryFolder, file.Name, NameCollisionOption.ReplaceExisting);
 
         BackgroundBrush.TextureUri = new Uri($"ms-appdata:///temp/{copy.Name}");
+    }
+
+    private void LightBlendAmount_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+    {
+        BackgroundBrush.LightBlendAmount = e.NewValue;
+    }
+
+    private void AmbientAmount_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+    {
+        BackgroundBrush.AmbientAmount = e.NewValue;
+    }
+
+    private void DiffuseAmount_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+    {
+        BackgroundBrush.DiffuseAmount = e.NewValue;
+    }
+
+    private void SpecularAmount_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+    {
+        BackgroundBrush.SpecularAmount = e.NewValue;
+    }
+
+    private void NormalMapBlurAmount_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+    {
+        BackgroundBrush.NormalMapBlurAmount = e.NewValue;
     }
 }

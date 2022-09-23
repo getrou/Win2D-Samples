@@ -15,8 +15,16 @@
                 LightBlendAmount="0.5"
                 AmbientAmount="0.15"
                 DiffuseAmount="1"
-                SpecularAmount="0.1"/>
+                SpecularAmount="0.1"
+                NormalMapBlurAmount="0"/>
         </Grid.Background>
-        <Button Content="Pick image" Click="Button_Click" VerticalAlignment="Top"/>
+        <StackPanel Spacing="20" HorizontalAlignment="Left" Width="200">
+            <Button Content="Pick image" Click="Button_Click" VerticalAlignment="Top"/>
+            <Slider Header="Light blend amount" StepFrequency="0.05" Minimum="0" Maximum="1" Value="0.5" ValueChanged="LightBlendAmount_ValueChanged"/>
+            <Slider Header="Ambient amount" StepFrequency="0.05" Minimum="0" Maximum="1" Value="0.15" ValueChanged="AmbientAmount_ValueChanged"/>
+            <Slider Header="Diffuse amount" StepFrequency="0.05" Minimum="0" Maximum="1" Value="1" ValueChanged="DiffuseAmount_ValueChanged"/>
+            <Slider Header="Specular amount" StepFrequency="0.05" Minimum="0" Maximum="1" Value="0.1" ValueChanged="SpecularAmount_ValueChanged"/>
+            <Slider Header="Normal map blur amount" StepFrequency="1" Minimum="0" Maximum="16" Value="0" ValueChanged="NormalMapBlurAmount_ValueChanged"/>
+        </StackPanel>
     </Grid>
 </UserControl>
