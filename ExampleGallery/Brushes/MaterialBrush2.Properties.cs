@@ -23,36 +23,36 @@ partial class MaterialBrush2
     /// </summary>
     public static readonly DependencyProperty LightBlendAmountProperty = DependencyProperty.Register(
         nameof(LightBlendAmount),
-        typeof(float),
+        typeof(double),
         typeof(MaterialBrush2),
-        new PropertyMetadata(0.5f, OnLightBlendAmountPropertyChanged));
+        new PropertyMetadata(0.5, OnLightBlendAmountPropertyChanged));
 
     /// <summary>
     /// Identifies the <see cref="AmbientAmount"/> dependency property.
     /// </summary>
     public static readonly DependencyProperty AmbientAmountProperty = DependencyProperty.Register(
         nameof(AmbientAmount),
-        typeof(float),
+        typeof(double),
         typeof(MaterialBrush2),
-        new PropertyMetadata(0.15f, OnAmbientAmountPropertyChanged));
+        new PropertyMetadata(0.15, OnAmbientAmountPropertyChanged));
 
     /// <summary>
     /// Identifies the <see cref="DiffuseAmount"/> dependency property.
     /// </summary>
     public static readonly DependencyProperty DiffuseAmountProperty = DependencyProperty.Register(
         nameof(DiffuseAmount),
-        typeof(float),
+        typeof(double),
         typeof(MaterialBrush2),
-        new PropertyMetadata(1f, OnDiffuseAmountPropertyChanged));
+        new PropertyMetadata(1, OnDiffuseAmountPropertyChanged));
 
     /// <summary>
     /// Identifies the <see cref="SpecularAmount"/> dependency property.
     /// </summary>
     public static readonly DependencyProperty SpecularAmountProperty = DependencyProperty.Register(
         nameof(SpecularAmount),
-        typeof(float),
+        typeof(double),
         typeof(MaterialBrush2),
-        new PropertyMetadata(0.1f, OnSpecularAmountPropertyChanged));
+        new PropertyMetadata(0.1, OnSpecularAmountPropertyChanged));
 
     /// <summary>
     /// Gets or sets the <see cref="Uri"/> for the texture to use
@@ -66,36 +66,36 @@ partial class MaterialBrush2
     /// <summary>
     /// Gets or sets the amount to use to blend the light effect over the texture (default is <c>0.5</c>).
     /// </summary>
-    public float LightBlendAmount
+    public double LightBlendAmount
     {
-        get => (float)GetValue(LightBlendAmountProperty);
+        get => (double)GetValue(LightBlendAmountProperty);
         set => SetValue(LightBlendAmountProperty, value);
     }
 
     /// <summary>
     /// Gets or sets the ambient amount for the light effect over the texture (default is <c>0.15</c>).
     /// </summary>
-    public float AmbientAmount
+    public double AmbientAmount
     {
-        get => (float)GetValue(AmbientAmountProperty);
+        get => (double)GetValue(AmbientAmountProperty);
         set => SetValue(AmbientAmountProperty, value);
     }
 
     /// <summary>
     /// Gets or sets the specular amount for the light effect over the texture (default is <c>1</c>).
     /// </summary>
-    public float DiffuseAmount
+    public double DiffuseAmount
     {
-        get => (float)GetValue(DiffuseAmountProperty);
+        get => (double)GetValue(DiffuseAmountProperty);
         set => SetValue(DiffuseAmountProperty, value);
     }
 
     /// <summary>
     /// Gets or sets the specular amount for the light effect over the texture (default is <c>0.1</c>).
     /// </summary>
-    public float SpecularAmount
+    public double SpecularAmount
     {
-        get => (float)GetValue(SpecularAmountProperty);
+        get => (double)GetValue(SpecularAmountProperty);
         set => SetValue(SpecularAmountProperty, value);
     }
 
@@ -126,7 +126,7 @@ partial class MaterialBrush2
 
         if (@this.CompositionBrush is CompositionBrush brush)
         {
-            brush.Properties.InsertScalar("LightBlendEffect.Source2Amount", (float)e.NewValue);
+            brush.Properties.InsertScalar("LightBlendEffect.Source2Amount", (float)(double)e.NewValue);
         }
     }
 
@@ -141,7 +141,7 @@ partial class MaterialBrush2
 
         if (@this.CompositionBrush is CompositionBrush brush)
         {
-            brush.Properties.InsertScalar("LightEffect.AmbientAmount", (float)e.NewValue);
+            brush.Properties.InsertScalar("LightEffect.AmbientAmount", (float)(double)e.NewValue);
         }
     }    
 
@@ -156,7 +156,7 @@ partial class MaterialBrush2
 
         if (@this.CompositionBrush is CompositionBrush brush)
         {
-            brush.Properties.InsertScalar("LightEffect.DiffuseAmount", (float)e.NewValue);
+            brush.Properties.InsertScalar("LightEffect.DiffuseAmount", (float)(double)e.NewValue);
         }
     }
 
@@ -171,7 +171,7 @@ partial class MaterialBrush2
 
         if (@this.CompositionBrush is CompositionBrush brush)
         {
-            brush.Properties.InsertScalar("LightEffect.SpecularAmount", (float)e.NewValue);
+            brush.Properties.InsertScalar("LightEffect.SpecularAmount", (float)(double)e.NewValue);
         }
     }
 }

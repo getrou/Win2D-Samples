@@ -47,15 +47,15 @@ public sealed partial class MaterialBrush2 : XamlCompositionBrushBase
         {
             Name = "LightBlendEffect",
             Source1Amount = 1,
-            Source2Amount = LightBlendAmount,
+            Source2Amount = (float)LightBlendAmount,
             MultiplyAmount = 0,
             Source1 = new CompositionEffectSourceParameter("Texture"),
             Source2 = new SceneLightingEffect()
             {
                 Name = "LightEffect",
-                AmbientAmount = AmbientAmount,
-                DiffuseAmount = DiffuseAmount,
-                SpecularAmount = SpecularAmount,
+                AmbientAmount = (float)AmbientAmount,
+                DiffuseAmount = (float)DiffuseAmount,
+                SpecularAmount = (float)SpecularAmount,
                 NormalMapSource = new CompositionEffectSourceParameter("NormalMap")
             },
         };
