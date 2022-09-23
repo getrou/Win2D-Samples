@@ -55,6 +55,15 @@ partial class MaterialBrush2
         new PropertyMetadata(0.1, OnSpecularAmountPropertyChanged));
 
     /// <summary>
+    /// Identifies the <see cref="NormalMapBlurAmount"/> dependency property.
+    /// </summary>
+    public static readonly DependencyProperty NormalMapBlurAmountProperty = DependencyProperty.Register(
+        nameof(NormalMapBlurAmount),
+        typeof(double),
+        typeof(MaterialBrush2),
+        new PropertyMetadata(0.0, OnNormalMapBlurAmountPropertyChanged));
+
+    /// <summary>
     /// Gets or sets the <see cref="Uri"/> for the texture to use
     /// </summary>
     public Uri? TextureUri
@@ -97,6 +106,15 @@ partial class MaterialBrush2
     {
         get => (double)GetValue(SpecularAmountProperty);
         set => SetValue(SpecularAmountProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the blur amount for the normal map texture (default is <c>0</c>).
+    /// </summary>
+    public double NormalMapBlurAmount
+    {
+        get => (double)GetValue(NormalMapBlurAmountProperty);
+        set => SetValue(NormalMapBlurAmountProperty, value);
     }
 
     /// <summary>
@@ -172,6 +190,21 @@ partial class MaterialBrush2
         if (@this.CompositionBrush is CompositionBrush brush)
         {
             brush.Properties.InsertScalar("LightEffect.SpecularAmount", (float)(double)e.NewValue);
+        }
+    }
+
+    /// <summary>
+    /// Updates the UI when <see cref="NormalMapBlurAmount"/> changes
+    /// </summary>
+    /// <param name="d">The current <see cref="MaterialBrush2"/> instance</param>
+    /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance for <see cref="NormalMapBlurAmountProperty"/></param>
+    private static void OnNormalMapBlurAmountPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        MaterialBrush2 @this = (MaterialBrush2)d;
+
+        if (@this.CompositionBrush is CompositionBrush brush)
+        {
+            brush.Properties.InsertScalar("BlurEffect.BlurAmount", (float)(double)e.NewValue);
         }
     }
 }

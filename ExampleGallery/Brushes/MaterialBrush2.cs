@@ -43,20 +43,27 @@ public sealed partial class MaterialBrush2 : XamlCompositionBrushBase
         CompositionBrush normalMapBrush = await GetNormalMapAsync();
 
         // Create the effect graph
-        IGraphicsEffect graphicsEffect = new ArithmeticCompositeEffect()
+        IGraphicsEffect graphicsEffect = new ArithmeticCompositeEffect
         {
             Name = "LightBlendEffect",
             Source1Amount = 1,
             Source2Amount = (float)LightBlendAmount,
             MultiplyAmount = 0,
             Source1 = new CompositionEffectSourceParameter("Texture"),
-            Source2 = new SceneLightingEffect()
+            Source2 = new SceneLightingEffect
             {
                 Name = "LightEffect",
                 AmbientAmount = (float)AmbientAmount,
                 DiffuseAmount = (float)DiffuseAmount,
                 SpecularAmount = (float)SpecularAmount,
-                NormalMapSource = new CompositionEffectSourceParameter("NormalMap")
+                NormalMapSource = new GaussianBlurEffect
+                {
+                    Name = "BlurEffect",
+                    BorderMode = EffectBorderMode.Hard,
+                    Optimization = EffectOptimization.Balanced,
+                    BlurAmount = (float)NormalMapBlurAmount,
+                    Source = new CompositionEffectSourceParameter("NormalMap"),
+                }
             },
         };
 
