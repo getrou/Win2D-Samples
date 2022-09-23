@@ -53,7 +53,7 @@ partial class MaterialBrush2
             float dx = 0.0f;
             float dy = 0.0f;
 
-            if (Hlsl.Any(new float2(dx, dy)))
+            if (gx != 0.0f || gy != 0.0f)
             {
                 // Compute direction of the vector
                 float theta = Hlsl.Atan2(gy, gx);
@@ -144,7 +144,7 @@ partial class MaterialBrush2
             float dx = 0.0f;
             float dy = 0.0f;
 
-            if (Hlsl.Any(new float2(dx, dy)))
+            if (gx != 0.0f || gy != 0.0f)
             {
                 // Compute direction of the vector
                 float theta = Hlsl.Atan2(gy, gx);
