@@ -5,7 +5,6 @@ using Microsoft.Graphics.Canvas.UI.Composition;
 using Microsoft.Graphics.Canvas;
 using Microsoft.UI.Composition;
 using Microsoft.UI.Composition.Effects;
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
 using System.Threading.Tasks;
 using Windows.Foundation;
@@ -31,39 +30,6 @@ public sealed partial class MaterialBrush2 : XamlCompositionBrushBase
     /// </summary>
     private PixelShaderEffect? _pixelShaderEffect;
 
-    /// <summary>
-    /// Gets or sets the <see cref="Uri"/> for the texture to use
-    /// </summary>
-    public Uri? TextureUri
-    {
-        get => (Uri)GetValue(TextureUriProperty);
-        set => SetValue(TextureUriProperty, value);
-    }
-
-    /// <summary>
-    /// Identifies the <see cref="TextureUri"/> dependency property.
-    /// </summary>
-    public static readonly DependencyProperty TextureUriProperty = DependencyProperty.Register(
-        nameof(TextureUri),
-        typeof(Uri),
-        typeof(MaterialBrush2),
-        new PropertyMetadata(null, OnTextureUriPropertyChanged));
-
-    /// <summary>
-    /// Updates the UI when <see cref="TextureUri"/> changes
-    /// </summary>
-    /// <param name="d">The current <see cref="AcrylicBrush"/> instance</param>
-    /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance for <see cref="TextureUriProperty"/></param>
-    private static void OnTextureUriPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        if (d is MaterialBrush2 brush &&
-            brush.CompositionBrush != null)
-        {
-            brush.OnDisconnected();
-            brush.OnConnected();
-        }
-    }
-
     /// <inheritdoc/>
     protected override async void OnConnected()
     {
@@ -79,15 +45,17 @@ public sealed partial class MaterialBrush2 : XamlCompositionBrushBase
         // Create the effect graph
         IGraphicsEffect graphicsEffect = new ArithmeticCompositeEffect()
         {
+            Name = "LightBlendEffect",
             Source1Amount = 1,
-            Source2Amount = 0.5f,
+            Source2Amount = LightBlendAmount,
             MultiplyAmount = 0,
             Source1 = new CompositionEffectSourceParameter("Texture"),
             Source2 = new SceneLightingEffect()
             {
-                AmbientAmount = 0.15f,
-                DiffuseAmount = 1,
-                SpecularAmount = 0.1f,
+                Name = "LightEffect",
+                AmbientAmount = AmbientAmount,
+                DiffuseAmount = DiffuseAmount,
+                SpecularAmount = SpecularAmount,
                 NormalMapSource = new CompositionEffectSourceParameter("NormalMap")
             },
         };
