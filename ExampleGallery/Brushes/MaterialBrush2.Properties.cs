@@ -144,7 +144,8 @@ partial class MaterialBrush2
     {
         MaterialBrush2 @this = (MaterialBrush2)d;
 
-        if (@this.CompositionBrush != null)
+        if (!Equals(e.OldValue, e.NewValue) &&
+            @this.CompositionBrush != null)
         {
             @this.OnDisconnected();
             @this.OnConnected();
@@ -235,7 +236,8 @@ partial class MaterialBrush2
     {
         MaterialBrush2 @this = (MaterialBrush2)d;
 
-        if (@this.CompositionBrush != null)
+        if (!Equals(e.OldValue, e.NewValue) &&
+            @this.CompositionBrush != null)
         {
             @this.OnDisconnected();
             @this.OnConnected();
