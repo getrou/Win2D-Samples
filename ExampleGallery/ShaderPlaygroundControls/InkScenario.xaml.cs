@@ -1,5 +1,10 @@
-﻿using Microsoft.Graphics.Canvas;
+﻿using ComputeSharp.D2D1.Interop;
+using ExampleGallery.Brushes;
+using ExampleGallery.Lights;
+using ExampleGallery.PixelShaders;
+using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Brushes;
+using Microsoft.Graphics.Canvas.Effects;
 using Microsoft.Graphics.Canvas.Geometry;
 using Microsoft.Graphics.Canvas.UI.Composition;
 using Microsoft.Graphics.DirectX;
@@ -23,6 +28,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics;
+using Windows.UI;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -34,10 +40,13 @@ namespace ExampleGallery
         private Compositor _compositor;
         private CanvasDevice _canvasDevice;
         private CompositionGraphicsDevice _compositionGraphicsDevice;
-        private CanvasRenderTarget _heightMap;
-
-        private CompositionDrawingSurface _inkingDrawingSurface;
         private InkManager _inkManager = null;
+
+        private CompositionDrawingSurface _colorDrawingSurface;
+        private CanvasRenderTarget _heightMap;
+        private CompositionDrawingSurface _normalDrawingSurface;
+        private PixelShaderEffect _normalEffect;
+
         private bool _mouseDown = false;
 
         public InkScenario()
@@ -65,33 +74,25 @@ namespace ExampleGallery
             _canvasDevice = CanvasDevice.GetSharedDevice();
             _compositionGraphicsDevice = CanvasComposition.CreateCompositionGraphicsDevice(_compositor, _canvasDevice);
 
-            // Draw the color of the text
-            _inkingDrawingSurface = _compositionGraphicsDevice.CreateDrawingSurface2(new SizeInt32(1024, 1024), DirectXPixelFormat.B8G8R8A8UIntNormalized, DirectXAlphaMode.Premultiplied);
-
-            //_heightMap = new CanvasRenderTarget(_canvasDevice, 1024, 1024, 96);
-
             _inkManager = new InkManager(_canvasDevice);
+
+            CreateColorSurface();
+            CreateHeightMap();
+            CreateNormalMap();
+            HookupGridBackground();
+
+            DrawCanvas();
 
             // TODO: temporary - want to use 'DrawingGrid.Background = MaterialBrush(...);' instead
 
-            var inkingVisual = _compositor.CreateSpriteVisual();
-            var surfaceBrush = _compositor.CreateSurfaceBrush(_inkingDrawingSurface);
-            surfaceBrush.Stretch = CompositionStretch.None;
-            inkingVisual.Brush = surfaceBrush;
-            inkingVisual.Size = new Vector2(1024, 1024);
-            ElementCompositionPreview.SetElementChildVisual(DrawingGrid, inkingVisual);
+            //var inkingVisual = _compositor.CreateSpriteVisual();
+            //var surfaceBrush = _compositor.CreateSurfaceBrush(_inkingDrawingSurface);
+            //surfaceBrush.Stretch = CompositionStretch.None;
+            //inkingVisual.Brush = surfaceBrush;
+            //inkingVisual.Size = new Vector2(1024, 1024);
+            //ElementCompositionPreview.SetElementChildVisual(DrawingGrid, inkingVisual);
 
             // TODO: end temporary
-
-            ClearCanvas();
-        }
-
-        private void ClearCanvas()
-        {
-            using (var ds = CanvasComposition.CreateDrawingSession(_inkingDrawingSurface))
-            {
-                ds.Clear(Colors.White);
-            }
         }
 
         private void DrawCanvas()
@@ -99,9 +100,23 @@ namespace ExampleGallery
             if (_inkManager == null)
                 return;
 
-            using (var ds = CanvasComposition.CreateDrawingSession(_inkingDrawingSurface))
+            // Draw the color of the text
+            using (var ds = CanvasComposition.CreateDrawingSession(_colorDrawingSurface))
+            {
+                ds.Clear(Colors.Gray);
+            }
+
+            // Draw HeightMap
+            using (var ds = _heightMap.CreateDrawingSession())
             {
                 _inkManager.Draw(ds);
+            }
+
+            // Draw NormalSurface
+            using (var ds = CanvasComposition.CreateDrawingSession(_normalDrawingSurface))
+            {
+                ds.Clear(Color.FromArgb(0, 0, 0, 0));
+                ds.DrawImage(_normalEffect);
             }
         }
 
@@ -141,12 +156,64 @@ namespace ExampleGallery
             DrawCanvas();
         }
 
-        private void GenerateHeightMap()
+        private void CreateColorSurface()
         {
-            if (_inkManager == null)
-                return;
+            _colorDrawingSurface = _compositionGraphicsDevice.CreateDrawingSurface2(new SizeInt32(1024, 1024), DirectXPixelFormat.B8G8R8A8UIntNormalized, DirectXAlphaMode.Premultiplied);
 
-            
+            using (var ds = CanvasComposition.CreateDrawingSession(_colorDrawingSurface))
+            {
+                ds.Clear(Colors.Gray);
+            }
+        }
+
+        private void CreateHeightMap()
+        {
+            _heightMap = new CanvasRenderTarget(_canvasDevice, 1024, 1024, 96);
+        }
+
+        // Set up pipeline to convert HeightMap to NormalMap
+        private void CreateNormalMap()
+        {
+            // Blur the height map
+            var blurredHeightMap = new GaussianBlurEffect()
+            {
+                BlurAmount = 5.0f,
+                Source = _heightMap
+            };
+
+            // Get the shader bytecode for the Sobel shader
+            //byte[] bytecode = D2D1PixelShader.LoadBytecode<SobelShader>().ToArray();
+            byte[] bytecode = D2D1PixelShader.LoadBytecode<SobelShader>().ToArray();
+
+            // Create a Win2D pixel shader effect with the shader bytecode
+            _normalEffect = new PixelShaderEffect(bytecode)
+            {
+                Source1 = blurredHeightMap,
+                Source1Mapping = SamplerCoordinateMapping.Offset,
+                MaxSamplerOffset = 1
+            };
+
+            // Normal effect gets manually drawn into the normalDrawingSurface
+            _normalDrawingSurface = _compositionGraphicsDevice.CreateDrawingSurface2(new SizeInt32(1024, 1024), DirectXPixelFormat.B8G8R8A8UIntNormalized, DirectXAlphaMode.Premultiplied);
+        }
+
+        private void HookupGridBackground()
+        {
+            var colorBrush = _compositor.CreateSurfaceBrush(_colorDrawingSurface);
+            var normalBrush = _compositor.CreateSurfaceBrush(_normalDrawingSurface);
+
+            colorBrush.Stretch = CompositionStretch.None;
+            normalBrush.Stretch = CompositionStretch.None;
+
+            DrawingGrid.Background = new MaterialBrush(colorBrush, normalBrush);
+            DrawingGrid.Lights.Add(new HoverLight());
+
+            //Visual distantLightVisual = ElementCompositionPreview.GetElementVisual(DrawingGrid);
+            //var distantLight = _compositor.CreateDistantLight();
+            //distantLight.Color = Colors.White;
+            //distantLight.Intensity = 0.5f;
+            //distantLight.CoordinateSpace = distantLightVisual;
+            //distantLight.Targets.Add(distantLightVisual);
         }
     }
 
@@ -163,7 +230,7 @@ namespace ExampleGallery
 
         public InkManager(ICanvasResourceCreator resourceCreator)
         {
-            m_inkBrush = new CanvasSolidColorBrush(resourceCreator, Colors.Black);
+            m_inkBrush = new CanvasSolidColorBrush(resourceCreator, Colors.White);
             BeginStroke(); // Ensure we always have an active stroke
         }
 
@@ -173,7 +240,7 @@ namespace ExampleGallery
 
         public void Draw(CanvasDrawingSession session)
         {
-            session.Clear(Colors.White);
+            session.Clear(Color.FromArgb(0,0,0,0));
 
             foreach (var stroke in m_strokes)
             {
@@ -206,7 +273,7 @@ namespace ExampleGallery
 
             for (int i = 1; i < points.Count; i++)
             {
-                session.DrawLine(points[i - 1], points[i], m_inkBrush, 5.0f);
+                session.DrawLine(points[i - 1], points[i], m_inkBrush, 3.0f);
             }
         }
 
