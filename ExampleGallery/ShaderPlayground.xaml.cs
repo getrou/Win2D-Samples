@@ -25,7 +25,7 @@ namespace ExampleGallery;
 public sealed partial class ShaderPlayground : UserControl
 {
     private int _scenario = 0;
-    private int _numScenarios = 2;
+    private const int _numScenarios = 3;
 
     public ShaderPlayground()
     {
@@ -49,6 +49,9 @@ public sealed partial class ShaderPlayground : UserControl
                 break;
             case 1:
                 ScenarioHolder.Children.Add(new BrickScenario());
+                break;
+            case 2:
+                ScenarioHolder.Children.Add(new InkScenario());
                 break;
         }
     }

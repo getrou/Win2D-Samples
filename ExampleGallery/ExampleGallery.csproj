@@ -87,6 +87,7 @@
     <None Remove="ShaderPlayground.xaml" />
     <None Remove="ShaderPlaygroundControls\BrickScenario.xaml" />
     <None Remove="ShaderPlaygroundControls\CustomPipelineScenario.xaml" />
+    <None Remove="ShaderPlaygroundControls\InkScenario.xaml" />
     <None Remove="ShaderPlaygroundControls\ShaderPlaygroundBlur.xaml" />
     <None Remove="ShaderPlaygroundControls\ShaderPlaygroundImage.xaml" />
     <None Remove="ShaderPlaygroundControls\TextScenario.xaml" />
@@ -319,7 +320,8 @@
     <PackageReference Include="Microsoft.Graphics.Win2D" Version="1.0.3.1" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.5" />
     <PackageReference Include="Microsoft.WindowsAppSDK.Foundation" Version="1.0.0-experimental1" />
-	<PackageReference Include="Microsoft.Windows.CSWinRT" Version="1.3.3" />
+    <PackageReference Include="Microsoft.Windows.CSWinRT" Version="1.3.3" />
+    <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="4.4.0-2.final" PrivateAssets="all" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 
@@ -439,6 +441,9 @@
     <None Update="BackgroundTaskExample.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
+    <Page Update="ShaderPlaygroundControls\InkScenario.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="ShaderPlaygroundControls\TextScenario.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
