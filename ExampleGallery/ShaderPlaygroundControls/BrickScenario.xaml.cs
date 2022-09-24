@@ -1,4 +1,5 @@
 ﻿using System;
+using ExampleGallery.Brushes;
 using ExampleGallery.Lights;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -63,5 +64,23 @@ public sealed partial class BrickScenario : UserControl
     private void NormalMapBlurAmount_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
     {
         BackgroundBrush.NormalMapBlurAmount = e.NewValue;
+    }
+
+    private void ComboBox_Loaded(object sender, RoutedEventArgs e)
+    {
+        ((ComboBox)sender).ItemsSource = new[]
+        {
+            EdgeDetectionQuality.Normal,
+            EdgeDetectionQuality.High
+        };
+
+        ((ComboBox)sender).SelectedIndex = 0;
+    }
+
+    private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        EdgeDetectionQuality quality = ((EdgeDetectionQuality[])((ComboBox)sender).ItemsSource)[((ComboBox)sender).SelectedIndex];
+
+        BackgroundBrush.EdgeDetectionQuality = quality;
     }
 }

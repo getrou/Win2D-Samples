@@ -21,14 +21,24 @@ namespace ExampleGallery.Brushes;
 public sealed partial class MaterialBrush2 : XamlCompositionBrushBase
 {
     /// <summary>
-    /// The cached shader bytecode for <see cref="SobelShader"/>.
+    /// The cached shader bytecode for <see cref="Sobel3x3Shader"/>.
     /// </summary>
-    private static readonly byte[] ShaderBytecode = D2D1PixelShader.LoadBytecode<SobelShader>().ToArray();
+    private static readonly byte[] Shader3x3Bytecode = D2D1PixelShader.LoadBytecode<Sobel3x3Shader>().ToArray();
 
     /// <summary>
-    /// The reusable <see cref="PixelShaderEffect"/> instance for the current brush.
+    /// The cached shader bytecode for <see cref="Sobel5x5Shader"/>.
     /// </summary>
-    private PixelShaderEffect? _pixelShaderEffect;
+    private static readonly byte[] Shader5x5Bytecode = D2D1PixelShader.LoadBytecode<Sobel5x5Shader>().ToArray();
+
+    /// <summary>
+    /// The reusable <see cref="PixelShaderEffect"/> instance for the current brush using <see cref="Sobel3x3Shader"/>.
+    /// </summary>
+    private PixelShaderEffect? _pixelShader3x3Effect;
+
+    /// <summary>
+    /// The reusable <see cref="PixelShaderEffect"/> instance for the current brush using <see cref="Sobel5x5Shader"/>.
+    /// </summary>
+    private PixelShaderEffect? _pixelShader5x5Effect;
 
     /// <inheritdoc/>
     protected override async void OnConnected()
@@ -116,20 +126,39 @@ public sealed partial class MaterialBrush2 : XamlCompositionBrushBase
             pixelFormat: DirectXPixelFormat.B8G8R8A8UIntNormalized,
             alphaMode: DirectXAlphaMode.Ignore);
 
-        // Create a Win2D pixel shader effect with the shader bytecode
-        _pixelShaderEffect ??= new(ShaderBytecode)
-        {
-            Source1Mapping = SamplerCoordinateMapping.Offset,
-            MaxSamplerOffset = 1
-        };
+        PixelShaderEffect effect;
 
-        // Set the shader source
-        _pixelShaderEffect.Source1 = canvasBitmap;
+        if (EdgeDetectionQuality == EdgeDetectionQuality.Normal)
+        {
+            // Create a Win2D pixel shader effect with the shader bytecode
+            _pixelShader3x3Effect ??= new PixelShaderEffect(Shader3x3Bytecode)
+            {
+                Source1Mapping = SamplerCoordinateMapping.Offset,
+                MaxSamplerOffset = 1
+            };
+
+            // Set the shader source
+            _pixelShader3x3Effect.Source1 = canvasBitmap;
+
+            effect = _pixelShader3x3Effect;
+        }
+        else
+        {
+            _pixelShader5x5Effect ??= new PixelShaderEffect(Shader5x5Bytecode)
+            {
+                Source1Mapping = SamplerCoordinateMapping.Offset,
+                MaxSamplerOffset = 2
+            };
+
+            _pixelShader5x5Effect.Source1 = canvasBitmap;
+
+            effect = _pixelShader5x5Effect;
+        }
 
         // Draw the pixel shader producing the normal map
         using (CanvasDrawingSession drawingSession = CanvasComposition.CreateDrawingSession(drawingSurface))
         {
-            drawingSession.DrawImage(_pixelShaderEffect);
+            drawingSession.DrawImage(effect);
         }
 
         // Create a composition surface brush and assign the resulting drawing surface to it

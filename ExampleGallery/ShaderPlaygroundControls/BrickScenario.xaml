@@ -25,6 +25,7 @@
             <Slider Header="Diffuse amount" StepFrequency="0.05" Minimum="0" Maximum="1" Value="1" ValueChanged="DiffuseAmount_ValueChanged"/>
             <Slider Header="Specular amount" StepFrequency="0.05" Minimum="0" Maximum="1" Value="0.1" ValueChanged="SpecularAmount_ValueChanged"/>
             <Slider Header="Normal map blur amount" StepFrequency="1" Minimum="0" Maximum="16" Value="0" ValueChanged="NormalMapBlurAmount_ValueChanged"/>
+            <ComboBox Header="Edge detection quality" Loaded="ComboBox_Loaded" SelectionChanged="ComboBox_SelectionChanged"/>
         </StackPanel>
     </Grid>
 </UserControl>

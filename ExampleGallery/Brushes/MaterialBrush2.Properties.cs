@@ -64,6 +64,15 @@ partial class MaterialBrush2
         new PropertyMetadata(0.0, OnNormalMapBlurAmountPropertyChanged));
 
     /// <summary>
+    /// Identifies the <see cref="EdgeDetectionQuality"/> dependency property.
+    /// </summary>
+    public static readonly DependencyProperty EdgeDetectionQualityProperty = DependencyProperty.Register(
+        nameof(EdgeDetectionQuality),
+        typeof(EdgeDetectionQuality),
+        typeof(MaterialBrush2),
+        new PropertyMetadata(EdgeDetectionQuality.Normal, OnEdgeDetectionQualityPropertyChanged));
+
+    /// <summary>
     /// Gets or sets the <see cref="Uri"/> for the texture to use
     /// </summary>
     public Uri? TextureUri
@@ -115,6 +124,15 @@ partial class MaterialBrush2
     {
         get => (double)GetValue(NormalMapBlurAmountProperty);
         set => SetValue(NormalMapBlurAmountProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the edge detection quality to use to calculate the normal maps (default is <see cref="EdgeDetectionQuality.Normal"/>).
+    /// </summary>
+    public EdgeDetectionQuality EdgeDetectionQuality
+    {
+        get => (EdgeDetectionQuality)GetValue(EdgeDetectionQualityProperty);
+        set => SetValue(EdgeDetectionQualityProperty, value);
     }
 
     /// <summary>
@@ -205,6 +223,22 @@ partial class MaterialBrush2
         if (@this.CompositionBrush is CompositionBrush brush)
         {
             brush.Properties.InsertScalar("BlurEffect.BlurAmount", (float)(double)e.NewValue);
+        }
+    }
+
+    /// <summary>
+    /// Updates the UI when <see cref="EdgeDetectionQuality"/> changes
+    /// </summary>
+    /// <param name="d">The current <see cref="MaterialBrush2"/> instance</param>
+    /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance for <see cref="EdgeDetectionQualityProperty"/></param>
+    private static void OnEdgeDetectionQualityPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        MaterialBrush2 @this = (MaterialBrush2)d;
+
+        if (@this.CompositionBrush != null)
+        {
+            @this.OnDisconnected();
+            @this.OnConnected();
         }
     }
 }

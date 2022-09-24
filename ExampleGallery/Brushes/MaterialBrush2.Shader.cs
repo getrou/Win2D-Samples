@@ -14,7 +14,7 @@ partial class MaterialBrush2
     [D2DInputComplex(0)]
     [D2DShaderProfile(D2D1ShaderProfile.PixelShader40)]
     [D2DRequiresScenePosition]
-    private readonly partial struct SobelShader : ID2D1PixelShader
+    private readonly partial struct Sobel3x3Shader : ID2D1PixelShader
     {
         /// <inheritdoc/>
         public float4 Execute()
