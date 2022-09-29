@@ -82,17 +82,6 @@ namespace ExampleGallery
             HookupGridBackground();
 
             DrawCanvas();
-
-            // TODO: temporary - want to use 'DrawingGrid.Background = MaterialBrush(...);' instead
-
-            //var inkingVisual = _compositor.CreateSpriteVisual();
-            //var surfaceBrush = _compositor.CreateSurfaceBrush(_inkingDrawingSurface);
-            //surfaceBrush.Stretch = CompositionStretch.None;
-            //inkingVisual.Brush = surfaceBrush;
-            //inkingVisual.Size = new Vector2(1024, 1024);
-            //ElementCompositionPreview.SetElementChildVisual(DrawingGrid, inkingVisual);
-
-            // TODO: end temporary
         }
 
         private void DrawCanvas()
