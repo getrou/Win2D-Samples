@@ -5,15 +5,30 @@
     xmlns:local="using:ExampleGallery"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
     mc:Ignorable="d">
 
-    <Grid Name="RootGrid">
-        <Grid Name="DrawingGrid" />
-        <StackPanel>
-            <TextBox Name="textBox" TextChanged="textBox_TextChanged" Text="Win2D is lit!"/>
-            <Slider Header="Blur Radius" Name="BlurRadius" Width="200" Minimum="0" Maximum="10" StepFrequency="0.1" HorizontalAlignment="Left" ValueChanged="BlurRadius_ValueChanged"/>
-            <Slider Header="Max Text Height" Name="MaxTextHeight" Width="200" Minimum="0" Maximum="255" Value="255" StepFrequency="1" HorizontalAlignment="Left" ValueChanged="MaxTextHeight_ValueChanged"/>
+    <StackPanel Name="RootGrid" Orientation="Horizontal">
+            <StackPanel>
+                <TextBox Name="textBox" TextChanged="textBox_TextChanged" Text="Win2D is lit!"/>
+                <Slider Header="Blur Radius"        Name="BlurRadius"       Width="200" Minimum="0" Maximum="10"    Value="0"   StepFrequency="0.1" HorizontalAlignment="Left" ValueChanged="BlurRadius_ValueChanged"/>
+                <Slider Header="Light Angle"        Name="LightAngle"       Width="200" Minimum="0" Maximum="6.28"  Value="0"   StepFrequency="0.01" HorizontalAlignment="Left" ValueChanged="LightDirection_ValueChanged"/>
+                <Slider Header="Light Height"       Name="LightHeight"      Width="200" Minimum="0" Maximum="1.0"   Value="0.04" StepFrequency="0.01" HorizontalAlignment="Left" ValueChanged="LightHeight_ValueChanged"/>
+                <Slider Header="Shadow Darkness"    Name="ShadowDarkness"   Width="200" Minimum="0" Maximum="1.0"   Value="1.0" StepFrequency="0.01" HorizontalAlignment="Left" ValueChanged="ShadowDarkness_ValueChanged"/>
+                <Slider Header="Shadow Stretch"     Name="ShadowStretch"    Width="200" Minimum="0" Maximum="5.0"   Value="2.0" StepFrequency="0.01" HorizontalAlignment="Left" ValueChanged="ShadowStretch_ValueChanged"/>
+                <Slider Header="Max Text Height"    Name="MaxTextHeight"    Width="200" Minimum="0" Maximum="255"   Value="255" StepFrequency="1" HorizontalAlignment="Left" ValueChanged="MaxTextHeight_ValueChanged"/>
+                <Slider Header="Ink Height"         Name="InkHeight"        Width="200" Minimum="0" Maximum="255"   Value="255" StepFrequency="1" HorizontalAlignment="Left" ValueChanged="InkHeight_ValueChanged"/>
         </StackPanel>
-    </Grid>
+            <StackPanel>
+                <TextBlock>Final Result</TextBlock>
+                <Grid Name="DrawingGrid" Width="1024" Height="256"/>
+            <TextBlock>Height</TextBlock>
+            <canvas:CanvasControl x:Name="HeightMapView" Draw="HeightMapView_Draw" Width="1024" Height="256" PointerPressed="HeightMapView_PointerPressed" PointerMoved="HeightMapView_PointerMoved" PointerReleased="HeightMapView_PointerReleased"/>
+            <TextBlock>Normal</TextBlock>
+            <canvas:CanvasControl x:Name="NormalMapView" Draw="NormalMapView_Draw" Width="1024" Height="256"/>
+            <TextBlock>Shadow</TextBlock>
+            <canvas:CanvasControl x:Name="ShadowView" Draw="ShadowView_Draw" Width="1024" Height="256"/>
+        </StackPanel>
+    </StackPanel>
 
 </UserControl>

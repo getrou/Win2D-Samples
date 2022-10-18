@@ -48,7 +48,7 @@ public readonly partial struct SobelShader : ID2D1PixelShader
         float dx = 0.0f;
         float dy = 0.0f;
 
-        if (gx != 0.0f || gy != 0.0f)
+        if (Hlsl.Abs(gx) > 0.01f || Hlsl.Abs(gy) > 0.01f)
         {
             // Compute direction of the vector
             float theta = Hlsl.Atan2(gy, gx);
