@@ -9,7 +9,7 @@
     <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
     <UseWinUI>true</UseWinUI>
 	<EnableDefaultContentItems>false</EnableDefaultContentItems>
-	<LangVersion>11.0</LangVersion>
+	<LangVersion>10.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="BackgroundTask\**" />
@@ -315,8 +315,7 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="4.4.0-2.final" PrivateAssets="all" />
-	<PackageReference Include="ComputeSharp.D2D1" Version="2.0.0-alpha.29" />
+    <PackageReference Include="ComputeSharp.D2D1" Version="2.0.0-alpha.28" />
     <PackageReference Include="Microsoft.Graphics.Win2D" Version="1.0.3.1" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.5" />
     <PackageReference Include="Microsoft.WindowsAppSDK.Foundation" Version="1.0.0-experimental1" />
