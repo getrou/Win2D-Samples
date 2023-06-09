@@ -21,7 +21,7 @@ public readonly partial struct ShadowShader : ID2D1PixelShader
     /// <inheritdoc/>
     public float4 Execute()
     {
-        // Sample pixels in a 3x3 window around the current pixel
+        // Sample the heightmap along the direction of the light ray.
         float centerHeight      = D2D.SampleInputAtOffset(0, new float2(0, 0)).X;
         float oneStepHeight     = D2D.SampleInputAtOffset(0, shadowStretch * dirToLightNormalized).X;
         float twoStepHeight     = D2D.SampleInputAtOffset(0, 2.0f * shadowStretch * dirToLightNormalized).X;
